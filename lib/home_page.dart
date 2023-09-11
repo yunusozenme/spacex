@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:spacex/bloc/spacex_bloc.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -59,18 +58,10 @@ class _HomePageState extends State {
   }
 
   Widget latestLaunchCard() {
-    final spacexModel = (_spacexBloc.state as SpacexSuccessState).spacexModel;
+    final spacexData = (_spacexBloc.state as SpacexSuccessState).spacexData;
     final sizeX = MediaQuery.of(context).size.width;
-    final crewName = spacexModel.name ?? '';
-    final youtubeID = spacexModel.links?.youtubeId ?? '';
-    final details = spacexModel.details ?? 'No Details Available';
-    final thumbnail = spacexModel.links?.patch?.smallThumb ?? '';
     final mediumTextStyle = Theme.of(context).textTheme.titleMedium;
     final largeTextStyle = Theme.of(context).textTheme.titleLarge;
-    final dateUnix = spacexModel.dateUnix;
-    final date = dateUnix != null ? DateFormat("yyyy-MM-dd")
-        .format(DateTime.fromMillisecondsSinceEpoch(dateUnix * 1000))
-        .toString() : '';
 
     return SizedBox(width: sizeX, child:
     Column(children: [
@@ -78,9 +69,9 @@ class _HomePageState extends State {
         Card(elevation: 8, child:
           Padding(padding: EdgeInsets.all(sizeX*0.05), child:
             Column(children: [
-              if(date.isNotEmpty) Text(date, style: mediumTextStyle),
+              Text(spacexData.date, style: mediumTextStyle),
               SizedBox(height: sizeX*0.02,),
-              if(thumbnail.isNotEmpty) Image.network(thumbnail, width: sizeX*0.5, fit: BoxFit.fitWidth,
+              if(spacexData.smallThumb.isNotEmpty) Image.network(spacexData.smallThumb, width: sizeX*0.5, fit: BoxFit.fitWidth,
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) return child;
@@ -94,18 +85,18 @@ class _HomePageState extends State {
                       );
                   },),
                 SizedBox(height: sizeX*0.02,),
-                if(crewName.isNotEmpty) Text(crewName, style: mediumTextStyle),
-                if(details.isNotEmpty) Text(details),
+                Text(spacexData.name, style: mediumTextStyle),
+                Text(spacexData.details),
               ],)
             )
           ),
         ),
-      if(youtubeID.isNotEmpty) Column(
+      if(spacexData.youtubeID.isNotEmpty) Column(
         children: [
           SizedBox(height: sizeX*0.05,),
           Text('Video', style: largeTextStyle,),
           SizedBox(height: sizeX*0.05,),
-          if(youtubeID.isNotEmpty) youtubePlayer(youtubeID),
+          youtubePlayer(spacexData.youtubeID),
           SizedBox(height: sizeX*0.05,),
          ],)
       ],)

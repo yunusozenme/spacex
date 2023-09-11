@@ -6,6 +6,6 @@ mixin SpacexApi {
 
   final apiExceptionMessage = 'Failed to Load SpaceX Launch Data';
 
-  Future<SpacexModel> getTestData();
-  Future<SpacexModel> getLatestSpacexLaunchData();
+  Future<SpacexData> getTestData();
+  Future<SpacexData> getLatestSpacexLaunchData();
 }

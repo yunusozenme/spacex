@@ -8,18 +8,20 @@ class SpacexRepository with SpacexApi {
 
   // Supply seed data to test pull to refresh
   @override
-  Future<SpacexModel> getTestData() async {
+  Future<SpacexData> getTestData() async {
     await Future.delayed(const Duration(seconds: 3));
     final dateUnix = (DateTime.now().toUtc().millisecondsSinceEpoch/1000).round();
-    return SpacexModel(name: SeedData.crewName, details: SeedData.details, dateUnix: dateUnix, links: DataLinks(patch: ImageLinks(smallThumb: SeedData.aiImageLink)));
+    final spacexModel = SpacexModel(name: SeedData.crewName, details: SeedData.details, dateUnix: dateUnix, links: DataLinks(patch: ImageLinks(smallThumb: SeedData.aiImageLink)));
+    return SpacexData.fromModel(spacexModel);
   }
 
   @override
-  Future<SpacexModel> getLatestSpacexLaunchData() async {
+  Future<SpacexData> getLatestSpacexLaunchData() async {
     final latestLaunchURI = Uri.parse(spacexURL+latestLaunchEndpoint);
     final response = await http.get(latestLaunchURI);
     if (response.statusCode == 200) {
-      return SpacexModel.fromJson(convert.jsonDecode(response.body));
+      final spacexModel = SpacexModel.fromJson(convert.jsonDecode(response.body));
+      return SpacexData.fromModel(spacexModel);
     }
     else {
       throw Exception(apiExceptionMessage);

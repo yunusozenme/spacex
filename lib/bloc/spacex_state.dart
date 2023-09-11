@@ -11,11 +11,11 @@ class SpacexLoadingState extends SpacexState {
 }
 
 class SpacexSuccessState extends SpacexState {
-  final SpacexModel spacexModel;
-  SpacexSuccessState(this.spacexModel);
+  final SpacexData spacexData;
+  SpacexSuccessState(this.spacexData);
 
   @override
-  List<Object> get props => [spacexModel];
+  List<Object> get props => [spacexData];
 }
 
 class SpacexFailureState extends SpacexState {

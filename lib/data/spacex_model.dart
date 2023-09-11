@@ -1,3 +1,25 @@
+import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
+
+class SpacexData extends Equatable {
+  final String name;
+  final String details;
+  final String smallThumb;
+  final String date;
+  final String youtubeID;
+  const SpacexData({required this.name, required this.details, required this.smallThumb,
+    required this.date, required this.youtubeID});
+
+  @override
+  List<Object?> get props => [name, details, smallThumb, date, youtubeID];
+
+  factory SpacexData.fromModel(SpacexModel model) =>
+      SpacexData(name: model.name ?? 'No name', details: model.details ?? 'No details available!',
+          smallThumb: model.links?.patch?.smallThumb ?? '', date: DateFormat("yyyy-MM-dd")
+          .format(DateTime.fromMillisecondsSinceEpoch((model.dateUnix ?? 0) * 1000))
+          .toString(), youtubeID: model.links?.youtubeId ?? '');
+}
+
 class SpacexModel {
   DataLinks? links;
   String? details;
